@@ -1,0 +1,22 @@
+version: '3'
+services:
+  zabbix-agent:
+    image: zabbix/zabbix-agent:alpine-latest
+    ports:
+      - "10050:10050"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /proc:/proc
+      - /sys:/sys
+      - /dev:/dev
+      - /var/run/docker.sock:/var/run/docker.sock
+    privileged: true
+    pid: "host"
+    restart: always
+    environment:
+      - ZBX_SERVER_HOST=85.159.231.169
+      - ZBX_SERVER_ACTIVE=85.159.231.169:10051
+      - ZBX_HOSTNAME=promhost
+      - ZBX_LISTENPORT=10050
+
