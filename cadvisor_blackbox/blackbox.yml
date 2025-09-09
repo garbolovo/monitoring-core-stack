@@ -9,3 +9,12 @@ modules:
       no_follow_redirects: false
       fail_if_ssl: false
       fail_if_not_ssl: false
+  http_ok_ua:
+    prober: http
+    timeout: 10s
+    http:
+      method: GET
+      preferred_ip_protocol: ip4
+      headers:
+        User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36
+      valid_status_codes: [ 200, 301, 302, 303, 307, 308 ]
