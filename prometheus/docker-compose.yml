@@ -13,7 +13,7 @@ services:
       - "9090:9090"
     volumes:
       - prom-data:/prometheus
-      - prom-configs:/etc/prometheus
+      # - prom-configs:/etc/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
   node-exporter:
     image: prom/node-exporter:v1.3.1
