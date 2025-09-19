@@ -14,12 +14,23 @@ services:
       - 8081:8080
     restart: unless-stopped
 
+#  blackbox-exporter:
+#    image: prom/blackbox-exporter:latest
+#    container_name: blackbox-exporter
+#    ports:
+#      - 9115:9115
+#    restart: unless-stopped
+#    volumes:
+#      - ./blackbox.yml:/etc/blackbox_exporter/blackbox.yml
+
   blackbox-exporter:
     image: prom/blackbox-exporter:latest
-    container_name: blackbox-exporter
-    ports:
-      - 9115:9115
-    restart: unless-stopped
+    command: [ '--config.file=/etc/blackbox_exporter/config.yml' ]
     volumes:
-      - ./blackbox.yml:/etc/blackbox_exporter/blackbox.yml
-
+      - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+    ports:
+      - "9115:9115"
+    restart: unless-stopped
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN   # безопасно добавить; нужно не везде, но лишним не будет
