@@ -1,14 +1,34 @@
+#modules:
+#  http_2xx:
+#    prober: http
+#    timeout: 5s
+#    http:
+#      valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+#      valid_status_codes: []  # Defaults to 2xx
+#      method: GET
+#      no_follow_redirects: false
+#      fail_if_ssl: false
+#      fail_if_not_ssl: false
+#  http_ok_ua:
+#    prober: http
+#    timeout: 10s
+#    http:
+#      method: GET
+#      preferred_ip_protocol: ip4
+#      headers:
+#        User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36
+#      valid_status_codes: [ 200, 301, 302, 303, 307, 308 ]
+
 modules:
   http_2xx:
     prober: http
-    timeout: 5s
+    timeout: 10s
     http:
       valid_http_versions: ["HTTP/1.1", "HTTP/2"]
-      valid_status_codes: []  # Defaults to 2xx
       method: GET
-      no_follow_redirects: false
-      fail_if_ssl: false
-      fail_if_not_ssl: false
+      preferred_ip_protocol: ip4
+
+  # для speedtest и “капризных” сайтов
   http_ok_ua:
     prober: http
     timeout: 10s
@@ -17,4 +37,16 @@ modules:
       preferred_ip_protocol: ip4
       headers:
         User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36
-      valid_status_codes: [ 200, 301, 302, 303, 307, 308 ]
+      valid_status_codes: [200, 301, 302, 303, 307, 308]
+
+  icmp_ping:
+    prober: icmp
+    timeout: 5s
+    icmp:
+      preferred_ip_protocol: ip4
+
+  tcp_connect:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: ip4
