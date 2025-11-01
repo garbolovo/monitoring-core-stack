@@ -1,16 +1,22 @@
 
-### This is basic stack of tools for monitoring infrastructure 
+### Simple Docker-based monitoring setup powered by Prometheus and Grafana.
 
 ### Core tools:
 - Prometheus (Gather (Collects) All Metrics)
 - Grafana (Visualising for humans as well alerting)
 
 ### Additional tools
-##### These below send metrics (data) to (as an example) Prometheus 
-- node-exporter
-- cAdvisor
-- blackbox
-- zabbix-agent
+##### These below send metrics (data) to (as an example) Prometheus
+##### Exporters: 
+node-exporter — system metrics
+
+cAdvisor — container metrics
+
+blackbox-exporter — endpoint probing
+
+zabbix-agent — extra host metrics
+
+
 
 All Deployed with Docker Compose
 
