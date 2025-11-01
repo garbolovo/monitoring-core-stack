@@ -8,13 +8,10 @@
 ### Additional tools
 ##### These below send metrics (data) to (as an example) Prometheus
 ##### Exporters:
-**node-exporter** — system metrics
-
-**cAdvisor** — container metrics
-
-**blackbox-exporter** — endpoint probing
-
-**zabbix-agent** — extra host metrics
+- **node-exporter** — system metrics
+- **cAdvisor** — container metrics
+- **blackbox-exporter** — endpoint probing
+- **zabbix-agent** — extra host metrics
 
 _All Deployed with Docker Compose_
 
