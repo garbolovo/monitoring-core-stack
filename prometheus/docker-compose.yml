@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   grafana:
-    image: grafana/grafana-enterprise:12.0.0-ubuntu
+    image: grafana/grafana-enterprise:12.3.2-boringcrypto
     ports:
       - "3000:3000"
     volumes:
