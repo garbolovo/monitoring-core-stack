@@ -22,26 +22,24 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9090"]
 
-  # node_exporter — ДОБАВЛЕН новый хост 185.230.191.112
+  # node_exporter hosts
   - job_name: "node_exporter"
     static_configs:
       - targets:
           - "node-exporter:9100"
           - "80.90.178.17:9100"
           - "85.159.231.169:9100"
-          - "185.230.191.112:9100"      # >>> added
+          - "185.230.191.112:9100"
 
-  # cAdvisor — ПЕРЕИМЕНОВАН job и ДОБАВЛЕН новый хост
-  - job_name: "cadvisor"                 # >>> renamed from "advisor"
+  # cAdvisor hosts
+  - job_name: "cadvisor"
     static_configs:
       - targets:
           - "85.159.231.169:8081"
           - "194.226.49.20:8081"
-          - "185.230.191.112:8081"      # >>> added
+          - "185.230.191.112:8081"
 
-  # -----------------------------
-  # Blackbox по трём «ракурсам»
-  # -----------------------------
+  # Blackbox checks from three probe hosts.
 
   # HTTP (fon.bet) через обычный http_2xx
   - job_name: "blackbox_http_169"
@@ -59,7 +57,7 @@ scrape_configs:
       - target_label: __address__
         replacement: 85.159.231.169:9115
       - target_label: blackbox_host
-        replacement: "85.159.231.169"   # >>> added label
+        replacement: "85.159.231.169"
 
   - job_name: "blackbox_http_194"
     metrics_path: /probe
@@ -76,7 +74,7 @@ scrape_configs:
       - target_label: __address__
         replacement: 194.226.49.20:9115
       - target_label: blackbox_host
-        replacement: "194.226.49.20"    # >>> added label
+        replacement: "194.226.49.20"
 
   - job_name: "blackbox_http_185"
     metrics_path: /probe
@@ -93,13 +91,13 @@ scrape_configs:
       - target_label: __address__
         replacement: 185.230.191.112:9115
       - target_label: blackbox_host
-        replacement: "185.230.191.112"  # >>> added label
+        replacement: "185.230.191.112"
 
   # HTTP (speedtest.net) с «человеческим» UA — смотри модуль http_ok_ua в blackbox.yml
   - job_name: "blackbox_http_speedtest_169"
     metrics_path: /probe
     params:
-      module: [http_ok_ua]               # >>> requires http_ok_ua module on 85.159.231.169
+      module: [http_ok_ua]
     static_configs:
       - targets:
           - https://www.speedtest.net
@@ -116,7 +114,7 @@ scrape_configs:
   - job_name: "blackbox_http_speedtest_194"
     metrics_path: /probe
     params:
-      module: [http_ok_ua]               # >>> requires http_ok_ua module on 194.226.49.20
+      module: [http_ok_ua]
     static_configs:
       - targets:
           - https://www.speedtest.net
@@ -133,7 +131,7 @@ scrape_configs:
   - job_name: "blackbox_http_speedtest_185"
     metrics_path: /probe
     params:
-      module: [http_ok_ua]               # >>> requires http_ok_ua module on 185.230.191.112
+      module: [http_ok_ua]
     static_configs:
       - targets:
           - https://www.speedtest.net
