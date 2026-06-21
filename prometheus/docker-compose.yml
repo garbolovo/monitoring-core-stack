@@ -7,7 +7,7 @@ services:
       - grafana-data:/var/lib/grafana
       - grafana-configs:/etc/grafana
   prometheus:
-    image: prom/prometheus:v2.36.0
+    image: prom/prometheus:v3.12.0
     ports:
       - "9090:9090"
     volumes:
