@@ -71,6 +71,10 @@ done
   compose -f prometheus/docker-compose.yml up -d
   compose -f zabbix-agent/docker-compose.yml up -d
 
+  log "Reloading bind-mounted configs"
+  compose -f cadvisor_blackbox/docker-compose.yml restart blackbox-exporter
+  compose -f prometheus/docker-compose.yml restart prometheus
+
   log "Container status"
   docker ps \
     --filter name=cadvisor \
