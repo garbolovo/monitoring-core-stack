@@ -1,6 +1,6 @@
 services:
   grafana:
-    image: grafana/grafana-enterprise:12.3.2-boringcrypto
+    image: grafana/grafana-enterprise:13.0.2-boringcrypto
     ports:
       - "3000:3000"
     volumes:
