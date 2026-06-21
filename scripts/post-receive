@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO=/var/repo/monitoring-core-stack.git
+WORK_TREE=/home/student/monitoring-core-stack
+BRANCH=refs/heads/master
+LOG=/var/log/git-deploy.log
+LOCK=/var/lock/monitoring-core-stack-deploy.lock
+ZERO=0000000000000000000000000000000000000000
+
+log() {
+  printf '[post-receive] %s %s\n' "$(date '+%Y-%m-%d %H:%M:%S %Z')" "$*"
+}
+
+compose() {
+  if command -v docker-compose >/dev/null 2>&1; then
+    docker-compose "$@"
+  else
+    docker compose "$@"
+  fi
+}
+
+oldrev=
+newrev=
+refname=
+
+while read -r old new ref; do
+  if [[ "$ref" == "$BRANCH" ]]; then
+    oldrev=$old
+    newrev=$new
+    refname=$ref
+  fi
+done
+
+{
+  if [[ -z "${refname:-}" ]]; then
+    log "Skip: push did not update $BRANCH"
+    exit 0
+  fi
+
+  if [[ "$newrev" == "$ZERO" ]]; then
+    log "Skip: $BRANCH was deleted"
+    exit 0
+  fi
+
+  exec 9>"$LOCK"
+  flock 9
+
+  short_new=$(git --git-dir="$REPO" rev-parse --short "$newrev")
+  short_old=$(git --git-dir="$REPO" rev-parse --short "$oldrev" 2>/dev/null || printf '%s' none)
+
+  log "Deploy started: $refname $short_old -> $short_new"
+
+  mkdir -p "$WORK_TREE"
+  git --git-dir="$REPO" --work-tree="$WORK_TREE" checkout -f "$newrev"
+
+  cd "$WORK_TREE"
+
+  log "Validating compose files"
+  compose -f cadvisor_blackbox/docker-compose.yml config >/dev/null
+  compose -f prometheus/docker-compose.yml config >/dev/null
+  compose -f zabbix-agent/docker-compose.yml config >/dev/null
+
+  log "Pulling images"
+  compose -f cadvisor_blackbox/docker-compose.yml pull
+  compose -f prometheus/docker-compose.yml pull
+  compose -f zabbix-agent/docker-compose.yml pull
+
+  log "Starting services"
+  compose -f cadvisor_blackbox/docker-compose.yml up -d
+  compose -f prometheus/docker-compose.yml up -d
+  compose -f zabbix-agent/docker-compose.yml up -d
+
+  log "Container status"
+  docker ps \
+    --filter name=cadvisor \
+    --filter name=blackbox \
+    --filter name=prometheus \
+    --filter name=zabbix \
+    --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+
+  log "Deploy finished: $short_new"
+} >>"$LOG" 2>&1
