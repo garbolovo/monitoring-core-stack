@@ -7,7 +7,6 @@ Simple Docker Compose based monitoring stack.
 
 - `prometheus/` - Prometheus, Grafana and local node-exporter.
 - `cadvisor_blackbox/` - cAdvisor and blackbox-exporter for remote probing hosts.
-- `zabbix-agent/` - standalone Zabbix agent compose file.
 
 ## Git remotes
 
@@ -52,24 +51,11 @@ Services:
 
 The blackbox modules are defined in `cadvisor_blackbox/blackbox.yml`. Prometheus currently expects the same modules on the configured blackbox hosts.
 
-## Zabbix agent
-
-The optional Zabbix agent is in `zabbix-agent/docker-compose.yml`.
-
-```bash
-cd zabbix-agent
-docker compose up -d
-docker compose ps
-```
-
-It reports to `85.159.231.169`.
-
 ## Useful checks
 
 ```bash
 docker compose -f prometheus/docker-compose.yml config
 docker compose -f cadvisor_blackbox/docker-compose.yml config
-docker compose -f zabbix-agent/docker-compose.yml config
 ```
 
 If `promtool` is installed, also run:

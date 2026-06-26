@@ -34,30 +34,12 @@ scrape_configs:
   - job_name: "cadvisor"
     static_configs:
       - targets:
-          - "85.159.231.169:8081"
           - "194.226.49.20:8081"
           - "185.230.191.112:8081"
 
-  # Blackbox checks from three probe hosts.
+  # Blackbox checks from two probe hosts.
 
   # HTTP (fon.bet) через обычный http_2xx
-  - job_name: "blackbox_http_169"
-    metrics_path: /probe
-    params:
-      module: [http_2xx]
-    static_configs:
-      - targets:
-          - https://fon.bet
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: 85.159.231.169:9115
-      - target_label: blackbox_host
-        replacement: "85.159.231.169"
-
   - job_name: "blackbox_http_194"
     metrics_path: /probe
     params:
@@ -93,23 +75,6 @@ scrape_configs:
         replacement: "185.230.191.112"
 
   # HTTP (speedtest.net) с «человеческим» UA — смотри модуль http_ok_ua в blackbox.yml
-  - job_name: "blackbox_http_speedtest_169"
-    metrics_path: /probe
-    params:
-      module: [http_ok_ua]
-    static_configs:
-      - targets:
-          - https://www.speedtest.net
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: 85.159.231.169:9115
-      - target_label: blackbox_host
-        replacement: "85.159.231.169"
-
   - job_name: "blackbox_http_speedtest_194"
     metrics_path: /probe
     params:
@@ -144,23 +109,7 @@ scrape_configs:
       - target_label: blackbox_host
         replacement: "185.230.191.112"
 
-  # ICMP (8.8.8.8) из трёх точек
-  - job_name: "blackbox_icmp_169"
-    metrics_path: /probe
-    params:
-      module: [icmp_ping]
-    static_configs:
-      - targets: ['8.8.8.8']
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: 85.159.231.169:9115
-      - target_label: blackbox_host
-        replacement: "85.159.231.169"
-
+  # ICMP (8.8.8.8) из двух точек
   - job_name: "blackbox_icmp_194"
     metrics_path: /probe
     params:
@@ -193,32 +142,13 @@ scrape_configs:
       - target_label: blackbox_host
         replacement: "185.230.191.112"
 
-  # TCP (SSH 22) из трёх точек к двум серверам (85.* и 185.*)
-  - job_name: "blackbox_tcp_169"
-    metrics_path: /probe
-    params:
-      module: [tcp_connect]
-    static_configs:
-      - targets:
-          - "85.159.231.169:22"
-          - "185.230.191.112:22"
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: 85.159.231.169:9115
-      - target_label: blackbox_host
-        replacement: "85.159.231.169"
-
+  # TCP (SSH 22) из двух точек к 185.230.191.112
   - job_name: "blackbox_tcp_194"
     metrics_path: /probe
     params:
       module: [tcp_connect]
     static_configs:
       - targets:
-          - "85.159.231.169:22"
           - "185.230.191.112:22"
     relabel_configs:
       - source_labels: [__address__]
@@ -236,7 +166,6 @@ scrape_configs:
       module: [tcp_connect]
     static_configs:
       - targets:
-          - "85.159.231.169:22"
           - "185.230.191.112:22"
     relabel_configs:
       - source_labels: [__address__]

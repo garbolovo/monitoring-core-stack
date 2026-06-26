@@ -59,17 +59,14 @@ done
   log "Validating compose files"
   compose -f cadvisor_blackbox/docker-compose.yml config >/dev/null
   compose -f prometheus/docker-compose.yml config >/dev/null
-  compose -f zabbix-agent/docker-compose.yml config >/dev/null
 
   log "Pulling images"
   compose -f cadvisor_blackbox/docker-compose.yml pull
   compose -f prometheus/docker-compose.yml pull
-  compose -f zabbix-agent/docker-compose.yml pull
 
   log "Starting services"
   compose -f cadvisor_blackbox/docker-compose.yml up -d
   compose -f prometheus/docker-compose.yml up -d
-  compose -f zabbix-agent/docker-compose.yml up -d
 
   log "Reloading bind-mounted configs"
   compose -f cadvisor_blackbox/docker-compose.yml restart blackbox-exporter
@@ -80,7 +77,6 @@ done
     --filter name=cadvisor \
     --filter name=blackbox \
     --filter name=prometheus \
-    --filter name=zabbix \
     --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
   log "Deploy finished: $short_new"
