@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
 
   blackbox-exporter:
-    image: prom/blackbox-exporter:latest
+    image: prom/blackbox-exporter:v0.28.0
     command: [ '--config.file=/etc/blackbox_exporter/config.yml' ]
     volumes:
       - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
