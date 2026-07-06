@@ -8,6 +8,8 @@ services:
       - grafana-configs:/etc/grafana
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    restart: unless-stopped
+      
   prometheus:
     image: prom/prometheus:v3.12.0
     ports:
@@ -15,6 +17,9 @@ services:
     volumes:
       - prom-data:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    restart: unless-stopped
+
+
   node-exporter:
     image: prom/node-exporter:v1.3.1
     ports:
@@ -28,6 +33,9 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude'
       - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
+    restart: unless-stopped
+
+
 volumes:
   grafana-data: {}
   grafana-configs: {}
