@@ -81,14 +81,14 @@
             "uid": "deixcnly4gcn4d"
           },
           "editorMode": "code",
-          "expr": "avg(probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\", job=~\"$protocol\"})",
+          "expr": "avg(probe_success{job=~\"blackbox_icmp_.*\", instance=~\"$target\", blackbox_host=~\"$probe_host\"})",
           "instant": true,
-          "legendFormat": "availability",
+          "legendFormat": "icmp availability",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Availability",
+      "title": "ICMP Availability",
       "type": "stat"
     },
     {
@@ -151,14 +151,14 @@
             "uid": "deixcnly4gcn4d"
           },
           "editorMode": "code",
-          "expr": "count(probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\", job=~\"$protocol\"} == 0)",
+          "expr": "count(probe_success{job=~\"blackbox_icmp_.*\", instance=~\"$target\", blackbox_host=~\"$probe_host\"} == 0)",
           "instant": true,
-          "legendFormat": "down checks",
+          "legendFormat": "down icmp checks",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Down Checks",
+      "title": "Down ICMP Checks",
       "type": "stat"
     },
     {
@@ -168,18 +168,26 @@
       },
       "fieldConfig": {
         "defaults": {
-          "decimals": 0,
+          "decimals": 4,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.05
+              },
+              {
+                "color": "red",
+                "value": 0.2
               }
             ]
           },
-          "unit": "short"
+          "unit": "s"
         },
         "overrides": []
       },
@@ -213,14 +221,14 @@
             "uid": "deixcnly4gcn4d"
           },
           "editorMode": "code",
-          "expr": "count(count by (blackbox_host) (probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\", job=~\"$protocol\"}))",
+          "expr": "avg(probe_icmp_duration_seconds{job=~\"blackbox_icmp_.*\", instance=~\"$target\", blackbox_host=~\"$probe_host\", phase=\"rtt\"})",
           "instant": true,
-          "legendFormat": "probe hosts",
+          "legendFormat": "average rtt",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Probe Hosts",
+      "title": "Average RTT",
       "type": "stat"
     },
     {
@@ -230,18 +238,26 @@
       },
       "fieldConfig": {
         "defaults": {
-          "decimals": 0,
+          "decimals": 4,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.05
+              },
+              {
+                "color": "red",
+                "value": 0.2
               }
             ]
           },
-          "unit": "short"
+          "unit": "s"
         },
         "overrides": []
       },
@@ -275,14 +291,14 @@
             "uid": "deixcnly4gcn4d"
           },
           "editorMode": "code",
-          "expr": "count(count by (instance) (probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\", job=~\"$protocol\"}))",
+          "expr": "max(probe_icmp_duration_seconds{job=~\"blackbox_icmp_.*\", instance=~\"$target\", blackbox_host=~\"$probe_host\", phase=\"rtt\"})",
           "instant": true,
-          "legendFormat": "targets",
+          "legendFormat": "max rtt",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Targets",
+      "title": "Max RTT",
       "type": "stat"
     },
     {
@@ -360,14 +376,14 @@
             "uid": "deixcnly4gcn4d"
           },
           "editorMode": "code",
-          "expr": "probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\", job=~\"$protocol\"}",
+          "expr": "probe_success{job=~\"blackbox_icmp_.*\", instance=~\"$target\", blackbox_host=~\"$probe_host\"}",
           "instant": true,
-          "legendFormat": "{{job}} {{instance}} from {{blackbox_host}}",
+          "legendFormat": "{{instance}} from {{blackbox_host}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Current Probe Matrix",
+      "title": "Current ICMP Matrix",
       "type": "table",
       "transformations": [
         {
@@ -387,6 +403,105 @@
           }
         }
       ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "deixcnly4gcn4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "deixcnly4gcn4d"
+          },
+          "editorMode": "code",
+          "expr": "probe_icmp_duration_seconds{job=~\"blackbox_icmp_.*\", instance=~\"$target\", blackbox_host=~\"$probe_host\", phase=\"rtt\"}",
+          "instant": false,
+          "legendFormat": "{{instance}} from {{blackbox_host}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "ICMP RTT",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -469,10 +584,10 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 12
       },
-      "id": 6,
+      "id": 7,
       "options": {
         "legend": {
           "calcs": [
@@ -497,14 +612,14 @@
             "uid": "deixcnly4gcn4d"
           },
           "editorMode": "code",
-          "expr": "probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\", job=~\"$protocol\"}",
+          "expr": "probe_success{job=~\"blackbox_icmp_.*\", instance=~\"$target\", blackbox_host=~\"$probe_host\"}",
           "instant": false,
-          "legendFormat": "{{job}} {{instance}} from {{blackbox_host}}",
+          "legendFormat": "{{instance}} from {{blackbox_host}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Availability Timeline",
+      "title": "ICMP Success Timeline",
       "type": "timeseries"
     },
     {
@@ -567,11 +682,11 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 12
+        "w": 24,
+        "x": 0,
+        "y": 20
       },
-      "id": 7,
+      "id": 8,
       "options": {
         "legend": {
           "calcs": [
@@ -596,118 +711,15 @@
             "uid": "deixcnly4gcn4d"
           },
           "editorMode": "code",
-          "expr": "probe_duration_seconds{instance=~\"$target\", blackbox_host=~\"$probe_host\", job=~\"$protocol\"}",
+          "expr": "probe_icmp_duration_seconds{job=~\"blackbox_icmp_.*\", instance=~\"$target\", blackbox_host=~\"$probe_host\"}",
           "instant": false,
-          "legendFormat": "{{job}} {{instance}} from {{blackbox_host}}",
+          "legendFormat": "{{instance}} from {{blackbox_host}} {{phase}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Probe Duration",
+      "title": "ICMP Phase Duration",
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "deixcnly4gcn4d"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "red",
-                  "index": 0,
-                  "text": "DOWN"
-                },
-                "1": {
-                  "color": "green",
-                  "index": 1,
-                  "text": "UP"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 20
-      },
-      "id": 8,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true
-      },
-      "pluginVersion": "13.1.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "deixcnly4gcn4d"
-          },
-          "editorMode": "code",
-          "expr": "probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\", job=~\"$protocol\"} == 0",
-          "instant": true,
-          "legendFormat": "{{job}} {{instance}} from {{blackbox_host}}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "Down Now",
-      "type": "table",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "__name__": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "Value": "Status",
-              "blackbox_host": "Probe host",
-              "instance": "Target",
-              "job": "Job"
-            }
-          }
-        }
-      ]
     }
   ],
   "refresh": "10s",
@@ -715,8 +727,7 @@
   "tags": [
     "blackbox",
     "prometheus",
-    "availability",
-    "overview"
+    "icmp"
   ],
   "templating": {
     "list": [
@@ -730,15 +741,15 @@
           "type": "prometheus",
           "uid": "deixcnly4gcn4d"
         },
-        "definition": "label_values(probe_success, instance)",
+        "definition": "label_values(probe_success{job=~\"blackbox_icmp_.*\"}, instance)",
         "hide": 0,
         "includeAll": true,
-        "label": "Target",
+        "label": "ICMP target",
         "multi": true,
         "name": "target",
         "options": [],
         "query": {
-          "query": "label_values(probe_success, instance)",
+          "query": "label_values(probe_success{job=~\"blackbox_icmp_.*\"}, instance)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -755,7 +766,7 @@
           "type": "prometheus",
           "uid": "deixcnly4gcn4d"
         },
-        "definition": "label_values(probe_success{instance=~\"$target\"}, blackbox_host)",
+        "definition": "label_values(probe_success{job=~\"blackbox_icmp_.*\", instance=~\"$target\"}, blackbox_host)",
         "hide": 0,
         "includeAll": true,
         "label": "Probe host",
@@ -763,32 +774,7 @@
         "name": "probe_host",
         "options": [],
         "query": {
-          "query": "label_values(probe_success{instance=~\"$target\"}, blackbox_host)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": true,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "deixcnly4gcn4d"
-        },
-        "definition": "label_values(probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\"}, job)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Protocol job",
-        "multi": true,
-        "name": "protocol",
-        "options": [],
-        "query": {
-          "query": "label_values(probe_success{instance=~\"$target\", blackbox_host=~\"$probe_host\"}, job)",
+          "query": "label_values(probe_success{job=~\"blackbox_icmp_.*\", instance=~\"$target\"}, blackbox_host)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -803,8 +789,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Blackbox Overview",
-  "uid": "xtkCtBkiz",
+  "title": "Blackbox ICMP",
+  "uid": "blackbox-icmp",
   "version": 1,
   "weekStart": ""
 }
