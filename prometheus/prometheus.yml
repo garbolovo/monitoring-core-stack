@@ -83,6 +83,7 @@ scrape_configs:
           - https://www.speedtest.net
           - https://www.youtube.com
           - https://leon.ru
+          - https://leonbets.com
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -102,6 +103,7 @@ scrape_configs:
           - https://www.speedtest.net
           - https://www.youtube.com
           - https://leon.ru
+          - https://leonbets.com
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
