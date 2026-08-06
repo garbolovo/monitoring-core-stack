@@ -84,6 +84,7 @@ scrape_configs:
           - https://www.youtube.com
           - https://leon.ru
           - https://leonbets.com
+          - https://gosuslugi.ru
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -104,6 +105,7 @@ scrape_configs:
           - https://www.youtube.com
           - https://leon.ru
           - https://leonbets.com
+          - https://gosuslugi.ru
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
