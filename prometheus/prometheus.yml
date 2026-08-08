@@ -38,11 +38,11 @@ scrape_configs:
 
   # Blackbox checks from two probe hosts.
 
-  # HTTP (fon.bet) через обычный http_2xx
+  # HTTP (fon.bet)
   - job_name: "blackbox_http_194"
     metrics_path: /probe
     params:
-      module: [http_2xx]
+      module: [http_ok_ua]
     static_configs:
       - targets:
           - https://fon.bet
@@ -59,7 +59,7 @@ scrape_configs:
   - job_name: "blackbox_http_185"
     metrics_path: /probe
     params:
-      module: [http_2xx]
+      module: [http_ok_ua]
     static_configs:
       - targets:
           - https://fon.bet
