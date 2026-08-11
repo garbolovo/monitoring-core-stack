@@ -33,6 +33,7 @@ Services:
 - node-exporter: `http://<host>:9100/metrics`
 
 Prometheus reads `prometheus/prometheus.yml` from the repository as a read-only bind mount.
+Grafana provisions the Prometheus data source and dashboards automatically from `prometheus/grafana/provisioning/`.
 
 ## Exporters stack
 
