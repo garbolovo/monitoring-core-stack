@@ -28,6 +28,7 @@ scrape_configs:
       - targets:
           - "node-exporter:9100"
           - "185.230.191.112:9100"
+          - "153.80.178.56:9100"
 
   # cAdvisor hosts
   - job_name: "cadvisor"
